@@ -18,16 +18,19 @@
 import axios from 'axios'
 import { ref } from '@vue/reactivity'
 export default {
-  props: ["modalActive"],
-  setup(props, context) {
+  props: ["modalActive", "member"],
+  setup(props, {emit}) {
+    
     function close() {
-      context.emit("closeDelete")
+      emit("closeDelete")
     }
 
     const deleteMember = async () => {
       try {
-         await axios.delete('http://localhost:3000/members/1')
-         
+        const id = props.member.id
+         await axios.delete('http://localhost:3000/members/' + id) 
+         emit("success")
+         emit("deleteItem")
       } catch (error) {
           console.log(error)
       }
@@ -48,7 +51,7 @@ const getMembers = () => {
                 throw Error('no data available')
             }
             members.value = data.data.members
-            console.log("members.value", members.value)
+          
         } catch (err) {
             error.value = err.message
             console.log(err.message)
