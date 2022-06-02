@@ -1,3 +1,4 @@
+
 import { ref } from '@vue/reactivity'
 import axios from 'axios'
 const getMembers = () => {
@@ -8,11 +9,15 @@ const getMembers = () => {
     const load = async ()=> {
         try {
             let data = await axios('http://localhost:3000/groupMembers/' + groupId)
+            
             if(!data.statusText){
                 throw Error('no data available')
             }
+           
             members.value = data.data.members
             console.log("members.value", members.value)
+            
+           
         } catch (err) {
             error.value = err.message
             console.log(err.message)

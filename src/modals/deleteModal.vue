@@ -16,59 +16,36 @@
 
 <script>
 import axios from 'axios'
-import { ref } from '@vue/reactivity'
+// import { ref } from '@vue/reactivity'
+import { inject } from 'vue'
+// import getMembers from '@/composables/getMembers'
 export default {
   props: ["modalActive", "member"],
-  setup(props, {emit}) {
+  setup(props, context) {
     
     function close() {
-      emit("closeDelete")
+     context.emit("closeDelete")
     }
-
+    const emitter = inject('emitter')
     const deleteMember = async () => {
-      try {
-        const id = props.member.id
-         await axios.delete('http://localhost:3000/members/' + id) 
-         emit("success")
-         emit("deleteItem")
-      } catch (error) {
-          console.log(error)
-      }
-       
-    }
-      
-
-    
-const getMembers = () => {
-    let members = ref([])
-    const error = ref(null)
-    let groupId = localStorage.groupId
-
-    const load = async ()=> {
         try {
-            let data = await axios('http://localhost:3000/groupMembers/' + groupId)
-            if(!data.statusText){
-                throw Error('no data available')
-            }
-            members.value = data.data.members
-          
-        } catch (err) {
-            error.value = err.message
-            console.log(err.message)
+            
+            const id = props.member.id
+            await axios.delete('http://localhost:3000/members/' + id) 
+            context.emit("success")
+            emitter.emit('removeMember', id)
+        } catch (error) {
+            console.log(error)
         }
     }
     return {
-        members,
-        error, 
-        load
+        
+        close,
+        deleteMember
     }
-}
+    }
+}       
 
-
-   
-    return { close, deleteMember, getMembers };
-  },
-};
 </script>
 
 <style scoped>

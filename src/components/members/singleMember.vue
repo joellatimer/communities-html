@@ -1,11 +1,12 @@
 <template>
 <div class=list>
-    <div class="members">
+    <div>
         <span >
          {{member.firstName}} {{member.lastName}}
         </span>
-       
     </div>
+
+
     <div class="icons">
         <span><fa class="edit" icon="edit" /> </span>
         <span><fa @click="openDelete" class="trash" icon="trash" /></span>

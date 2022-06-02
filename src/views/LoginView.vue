@@ -7,9 +7,9 @@
         <form @submit.prevent="loginGroup">
             <div class="loginform">
                 <div class="banner">Login to Communities</div>
-                <input type="text" placeholder="Group Name" class="form-control" v-model="groupName" />
-                <input type="password" placeholder="Password" class="form-control" v-model="password">
-                <button>Login</button>
+                    <input type="text" placeholder="Group Name" class="form-control" v-model="groupName" />
+                    <input type="password" placeholder="Password" class="form-control" v-model="password">
+                    <button>Login</button>
             </div>
         </form>
      
