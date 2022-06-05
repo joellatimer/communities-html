@@ -9,7 +9,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 
 const emitter = mitt()
 
-// import store from './store'
+
 library.add(fas)
 if(localStorage.token){
     setAuthHeader(localStorage.token)

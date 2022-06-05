@@ -15,36 +15,37 @@
        
     <div class="btnAdd" @click="toggleModal">Add Member</div>
 </div> 
-    <transition name="modal-animation">
-        <div v-show="modalActive" class="modal">
-            <transition name="modal-animation-inner">
-                <div v-show="modalActive" class="modal-inner">
-                    <div class="modalContent">
-                        <div class="top">
-                            <h3>Add A New Member</h3>
-                            <fa @click="toggleModal" class="x" icon="x"/>
-                        </div>
-                        
+<transition name="modal-animation">
+    <div v-show="modalActive" class="modal">
+        <transition name="modal-animation-inner">
+            <div v-show="modalActive" class="modal-inner">
+                <div class="modalContent">
+                    <div class="top">
+                        <h3>Add A New Member</h3>
+                        <fa @click="toggleModal" class="x" icon="x"/>
                     </div>
-                    <div class="info">
-                         <form @submit.prevent="handleSubmit">
-                            <input type="text" placeholder="firstName" class=:form-control v-model="firstName">
-                            <input type="text" placeholder="lastName" class=:form-control v-model="lastName">
-                            <input type="text" placeholder="dateJoined" class=:form-control v-model="dateJoined">
-                            <button class="btnAdd btnPlus">Add Member</button>
-                        </form>  
-                    </div>
-                </div>    
-            </transition>
-        </div>
-  </transition>
+                    
+                </div>
+                <div class="info">
+                    <form @submit.prevent="handleSubmit">
+                        <input type="text" placeholder="firstName" class=:form-control v-model="firstName">
+                        <input type="text" placeholder="lastName" class=:form-control v-model="lastName">
+                        <input type="text" placeholder="dateJoined" class=:form-control v-model="dateJoined">
+                        <button class="btnAdd btnPlus">Add Member</button>
+                    </form>  
+                </div>
+            </div>    
+        </transition>
+    </div>
+</transition>
     
 </template>
 
 
 
 <script>
-    import {ref} from '@vue/reactivity'
+    import {ref, computed} from '@vue/reactivity'
+    import { inject } from 'vue'
     import getMembers from '../../composables/members/getMembers'
     import singleMember from './singleMember'
     import axios from 'axios'
@@ -56,7 +57,6 @@
             const firstName = ref('')
             const lastName = ref('')
             const dateJoined = ref('')
-            let fullName = ref('')
             let groupId = localStorage.groupId
             const Group = localStorage.loggedInGroup
 
@@ -64,23 +64,44 @@
 
             const toggleModal = () => {modalActive.value = !modalActive.value}
 
-
             const {members, error, load} = getMembers()
+               
             load()
+
+            // delete modal button section
+
+             const emitter = inject('emitter')
+
+              emitter.on('removeMember', () => {  
+                console.log("emitter Received")
+                    load()
+                   
+                })  
+
+            // js section for adding a member modal
             groupId = parseFloat(groupId)
-           
-            fullName = firstName.value
-            console.log("fullname", fullName)
-            function handleSubmit() {
-                axios.post('http://localhost:3000/members',{
-                    firstName:firstName.value, 
-                    lastName:lastName.value, 
-                    dateJoined:dateJoined.value, 
-                    groupId:groupId
+          
+            const fullName = computed(() => {
+                firstName.value + '' + lastName.value
+            })
+          
+            const handleSubmit = async() =>{
+                try {
+                    await axios.post('http://localhost:3000/members',{
+                        firstName:firstName.value, 
+                        lastName:lastName.value, 
+                        dateJoined:dateJoined.value, 
+                        groupId:groupId
                 })
+                } catch (error) {
+                    // console.log(error)
+                }
+               
+                toggleModal()
+                load()
         
                 
-                // .catch((err => console.error(err)))
+              
             }
 
             
@@ -171,6 +192,7 @@
   
 }
 
+
 i {
     position: absolute;
     top: 15px;
@@ -204,17 +226,27 @@ i {
     
     
 }
+.list {
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    height:40px;
+    border:solid 1px lightgrey;
+}   
+span {
+    margin-left:20px;
+
+} 
 
 .top {
     display:flex;
     justify-content: space-between;
-    margin-top: 10px;
-    margin-bottom:15px;
-
-
-
-}  
-
+   
+    margin-bottom:15px; 
+    background-color:rgb(60, 60, 245);
+    color:white;
+    padding:15px;
+} 
 h3 {
     margin-left:10px;
 }
@@ -222,6 +254,11 @@ h3 {
      display: flex;
      flex-direction:column;
 
+modalContent {
+    background-color:#1966d2;
+
+}
+     
     
 
 } 
