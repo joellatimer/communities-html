@@ -9,7 +9,7 @@
         <div v-for="member in members" :key="member.id">
             
             
-            <singleMember   :member="member" />
+            <singleMember  :member="member" />
         </div>
     </div> 
        
