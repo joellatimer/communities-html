@@ -87,7 +87,7 @@
           
             const handleSubmit = async() =>{
                 try {
-                    await axios.post('http://localhost:3000/members',{
+                    await axios.post(process.env.VUE_APP_URL+'members',{
                         firstName:firstName.value, 
                         lastName:lastName.value, 
                         dateJoined:dateJoined.value, 

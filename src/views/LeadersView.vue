@@ -28,9 +28,11 @@ import meetingList from '../components/meetings/meetingList.vue'
 import attendsList from '../components/attends/attendsList.vue'
 
 
+
     export default {
         components: { memberList, meetingList, attendsList, navHead},
         data(){
+
             return {
                
 

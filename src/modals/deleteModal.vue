@@ -31,7 +31,7 @@ export default {
         try {
             
             const id = props.member.id
-            await axios.delete('http://localhost:3000/members/' + id) 
+            await axios.delete(process.env.VUE_APP_URL+'members/' + id) 
             context.emit("success")
             emitter.emit('removeMember')
         } catch (error) {

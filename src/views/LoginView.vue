@@ -25,19 +25,26 @@ import axios from 'axios'
 export default {
 
     data(){
+       
+        
         return {
             groupName: "",
             password: ""
         }
+    
     },
     methods:{
+        
         loginGroup () {
+           
             const credentials = {
                 groupName: this.groupName,
                 password: this.password
             }
+            
+            console.log("env", process.env.VUE_APP_URL)
         
-            axios.post("http://localhost:3000/groups/login", credentials)
+            axios.post( process.env.VUE_APP_URL+"groups/login", credentials)
             .then((response) => {
                 setAuthHeader(response.data.token)
                 localStorage.setItem('token', response.data.token),
@@ -55,7 +62,7 @@ export default {
         },
         getPost(){
             axios
-                .get('http://localhost:3000/groups')
+                .get("process.env.VUE_APP_URL+groups")
                 .then(response => console.log(response.data))
                 .catch(err => console.log(err.response))
         }
