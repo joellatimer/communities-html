@@ -62,7 +62,7 @@ export default {
         },
         getPost(){
             axios
-                .get("process.env.VUE_APP_URL+groups")
+                .get("process.env.VUE_APP_URL+/groups")
                 .then(response => console.log(response.data))
                 .catch(err => console.log(err.response))
         }
